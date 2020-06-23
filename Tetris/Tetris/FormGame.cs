@@ -23,16 +23,22 @@ namespace Tetris
             InitializeComponent();
         }
 
+        //폼 불러오기
         private void FormMain_Load(object sender, EventArgs e)
         {
+
+            //Game.cs와 GameRule.cs의 값 불러와 저장
             game = Game.Singleton;
             boardX = GameRule.boardX;
             boardY = GameRule.boardY;
             blockWidth = GameRule.blockWidth;
             blockHeight = GameRule.blockHeight;
+
+            //폼의 크기 지정
             this.SetClientSizeCore(boardX * blockWidth, boardY * blockHeight);
         }
 
+        //폼에 그리기
         private void FormMain_Paint(object sender, PaintEventArgs e)
         {
             DoubleBuffered = true;
@@ -41,12 +47,44 @@ namespace Tetris
             DrawBoard(e.Graphics);
         }
 
+        //보드의 가이드라인 그리기
         private void DrawGraduation(Graphics graphics)
         {
             DrawHorizons(graphics);
             DrawVerticals(graphics);
         }
 
+        //그리기 _ 보드의 가이드라인 (수평선)
+        private void DrawHorizons(Graphics graphics)
+        {
+            Point st = new Point();
+            Point et = new Point();
+            for (int cy = 0; cy < boardY; cy++)
+            {
+                st.X = 0;
+                st.Y = cy * blockHeight;
+                et.X = boardX * blockWidth;
+                et.Y = st.Y;
+                graphics.DrawLine(Pens.LightGray, st, et);
+            }
+        }
+
+        //그리기 _ 보드의 가이드라인 (수직선)
+        private void DrawVerticals(Graphics graphics)
+        {
+            Point st = new Point();
+            Point et = new Point();
+            for (int cx = 0; cx < boardX; cx++)
+            {
+                st.X = cx * blockWidth;
+                st.Y = 0;
+                et.X = st.X;
+                et.Y = boardY * blockHeight;
+                graphics.DrawLine(Pens.LightGray, st, et);
+            }
+        }
+
+        //그리기 _ 도형
         private void DrawBlock(Graphics graphics)
         {
             Pen blockPen = new Pen(Color.Black, 4);
@@ -67,6 +105,7 @@ namespace Tetris
             }
         }
 
+        //그리기 _ 보드
         private void DrawBoard(Graphics graphics)
         {
             for (int xx = 0; xx < boardX; xx++)
@@ -83,42 +122,15 @@ namespace Tetris
             }
         }
 
-        private void DrawHorizons(Graphics graphics)
-        {
-            Point st = new Point();
-            Point et = new Point();
-            for (int cy = 0; cy < boardY; cy++)
-            {
-                st.X = 0;
-                st.Y = cy * blockHeight;
-                et.X = boardX * blockWidth;
-                et.Y = st.Y;
-                graphics.DrawLine(Pens.LightGray, st, et);
-            }
-        }
-
-        private void DrawVerticals(Graphics graphics)
-        {
-            Point st = new Point();
-            Point et = new Point();
-            for(int cx = 0; cx < boardX; cx++)
-            {
-                st.X = cx * blockWidth;
-                st.Y = 0;
-                et.X = st.X;
-                et.Y = boardY * blockHeight;
-                graphics.DrawLine(Pens.LightGray, st, et);
-            }
-        }
-
+        //키보드 이벤트 설정
         private void FormMain_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
-                case Keys.Right:MoveRight(); 
+                case Keys.Left: MoveLeft();
                     return;
-                
-                case Keys.Left: MoveLeft(); 
+
+                case Keys.Right: MoveRight(); 
                     return;
                 
                 case Keys.Down: MoveDown(); 
@@ -132,15 +144,7 @@ namespace Tetris
             }
         }
 
-        private void MoveRight()
-        {
-            if (game.MoveRight())
-            {
-                Region rg = MakeRegion(-1, 0);
-                Invalidate(rg);
-            }
-        }
-
+        //왼쪽으로 이동한 곳에 도형 다시 그리기
         private void MoveLeft()
         {
             if (game.MoveLeft())
@@ -150,15 +154,17 @@ namespace Tetris
             }
         }
 
-        private void MoveTurn()
+        //오른쪽으로 이동한 곳에 도형 다시 그리기
+        private void MoveRight()
         {
-            if (game.MoveTurn())
+            if (game.MoveRight())
             {
-                Region rg = MakeRegion();
+                Region rg = MakeRegion(-1, 0);
                 Invalidate(rg);
             }
         }
 
+        //아래로 이동한 곳에 도형 다시 그리기
         private void MoveDown()
         {
             if (game.MoveDown())
@@ -172,6 +178,7 @@ namespace Tetris
             }
         }
 
+        //바닥으로 바로 이동한 곳에 도형 다시 그리기
         private void MoveSsDown()
         {
             while (game.MoveDown())
@@ -182,30 +189,17 @@ namespace Tetris
             EndCheck();
         }
 
-        private void EndCheck()
+        //회전한 도형 다시 그리기
+        private void MoveTurn()
         {
-            if (game.Next())
+            if (game.MoveTurn())
             {
-                Invalidate();
-            }
-            else
-            {
-                timerDrop.Enabled = false;
-
-                DialogResult result = MessageBox.Show("다시 시작하시겠습니까??", "게임 끝", MessageBoxButtons.YesNo);
-                if (result == DialogResult.Yes)
-                {
-                    game.Restart();
-                    timerDrop.Enabled = true;
-                    Invalidate();
-                }
-                else
-                {
-                    Close();
-                }
+                Region rg = MakeRegion();
+                Invalidate(rg);
             }
         }
 
+        //이동한 도형 계산
         private Region MakeRegion(int cx, int cy)
         {
             Point now = game.NowPosition;
@@ -232,6 +226,7 @@ namespace Tetris
             return region;
         }
 
+        //회전한 도형 계산
         private Region MakeRegion()
         {
             Point now = game.NowPosition;
@@ -263,6 +258,32 @@ namespace Tetris
             return region;
         }
 
+        //게임 종료여부 확인
+        private void EndCheck()
+        {
+            if (game.Next())
+            {
+                Invalidate();
+            }
+            else
+            {
+                timerDrop.Enabled = false;
+
+                DialogResult result = MessageBox.Show("다시 시작하시겠습니까??", "게임 끝", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    game.Restart();
+                    timerDrop.Enabled = true;
+                    Invalidate();
+                }
+                else
+                {
+                    Close();
+                }
+            }
+        }
+
+        //아래로 1초당 한 칸씩 이동
         private void timerDrop_Tick(object sender, EventArgs e)
         {
             MoveDown();

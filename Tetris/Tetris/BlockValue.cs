@@ -8,6 +8,7 @@ namespace Tetris
 {
     static class BlockValue
     {
+        //7개의 도형 그리기
         static public readonly int[,,,] bvalues = new int[7, 4, 4, 4]
         {
             #region block_I

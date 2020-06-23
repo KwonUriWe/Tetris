@@ -16,3 +16,12 @@ C:\Users\KB\Desktop\Tetris\Tetris\obj\Debug\Tetris.csproj.GenerateResource.cache
 C:\Users\KB\Desktop\Tetris\Tetris\obj\Debug\Tetris.exe
 C:\Users\KB\Desktop\Tetris\Tetris\obj\Debug\Tetris.pdb
 C:\Users\KB\Desktop\Tetris\Tetris\obj\Debug\Tetris.FormGame.resources
+C:\Users\dnflw\Desktop\Tetris\Tetris\bin\Debug\Tetris.exe.config
+C:\Users\dnflw\Desktop\Tetris\Tetris\bin\Debug\Tetris.exe
+C:\Users\dnflw\Desktop\Tetris\Tetris\bin\Debug\Tetris.pdb
+C:\Users\dnflw\Desktop\Tetris\Tetris\obj\Debug\Tetris.csprojAssemblyReference.cache
+C:\Users\dnflw\Desktop\Tetris\Tetris\obj\Debug\Tetris.FormGame.resources
+C:\Users\dnflw\Desktop\Tetris\Tetris\obj\Debug\Tetris.Properties.Resources.resources
+C:\Users\dnflw\Desktop\Tetris\Tetris\obj\Debug\Tetris.csproj.GenerateResource.cache
+C:\Users\dnflw\Desktop\Tetris\Tetris\obj\Debug\Tetris.exe
+C:\Users\dnflw\Desktop\Tetris\Tetris\obj\Debug\Tetris.pdb
